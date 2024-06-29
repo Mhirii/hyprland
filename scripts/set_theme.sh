@@ -11,7 +11,7 @@ modules=$hypr/modules
 
 rofi=$modules/rofi
 alacritty=$modules/alacritty
-waybar=$modules/waybar
+waybar=$XDG_CONFIG_HOME/waybar
 
 fish=$cf/fish
 mako=$cf/mako
@@ -33,7 +33,7 @@ set_alacritty() {
 	ln -sf "$file" "$target"
 }
 set_fish() {
-	sed -i "s/set -x theme .*$/set -x theme $1/" "$fish/current_theme.fish"
+	sed -i "'s/set -x theme .*/set -x theme $1/'" "$fish/current_theme.fish"
 }
 set_mako() {
 	ctp=$(current_theme_path "$1")
@@ -59,7 +59,7 @@ set_waybar() {
 	file=$ctp/waybar.css
 	ln -sf "$file" "$waybar/theme.css"
 	pkill waybar
-	waybar -c "$waybar/config.jsonc" -s "$waybar/style.css" &
+	waybar &
 }
 set_hypr() {
 	sed -i "s/theme =.*/theme = $1/" "$hypr/hyprlock.conf"
@@ -67,12 +67,12 @@ set_hypr() {
 }
 
 set_theme() {
+	set_waybar "$1"
 	set_swaync "$1"
 	set_alacritty "$1"
 	set_fish "$1"
 	set_mako "$1"
 	set_rofi "$1"
-	set_waybar "$1"
 	set_hypr "$1"
 	set_wallaper "$1"
 	if $use_mako; then
