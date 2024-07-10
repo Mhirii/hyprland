@@ -65,6 +65,9 @@ set_hypr() {
   sed -i "s/theme =.*/theme = $1/" "$hypr/hyprlock.conf"
   sed -i "s/theme =.*/theme = $1/" "$hypr/hyprland.conf"
 }
+set_starship() {
+  sed -i "s/palette =.*/palette = \"$1\"/" "$HOME/.config/starship.toml"
+}
 
 set_theme() {
   set_waybar "$1"
@@ -75,6 +78,7 @@ set_theme() {
   set_rofi "$1"
   set_hypr "$1"
   set_wallaper "$1"
+  set_starship "$1"
   if $use_mako; then
     makoctl reload
   else
