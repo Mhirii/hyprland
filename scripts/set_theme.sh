@@ -5,6 +5,7 @@ use_mako=false
 # config dirs
 cf=$HOME/.config
 hypr=$cf/hypr
+dot=$HOME/dotfiles/.config
 
 themes_dir=$hypr/themes
 modules=$hypr/modules
@@ -13,7 +14,7 @@ rofi=$modules/rofi
 alacritty=$modules/alacritty
 waybar=$XDG_CONFIG_HOME/waybar
 
-fish=$cf/fish
+fish=$dot/fish
 mako=$cf/mako
 
 current_theme_path() {
@@ -33,7 +34,7 @@ set_alacritty() {
   ln -sf "$file" "$target"
 }
 set_fish() {
-  sed -i "'s/set -x theme .*/set -x theme $1/'" "$fish/current_theme.fish"
+  sed -i "s/set -x theme .*/set -x theme $1/" "$fish/current_theme.fish"
 }
 set_mako() {
   ctp=$(current_theme_path "$1")
