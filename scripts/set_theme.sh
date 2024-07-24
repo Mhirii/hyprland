@@ -94,23 +94,13 @@ set_fuzzel() {
   fi
   source "$theme_file"
 
-  if [ -z "$accent" ]; then
-    echo "Fuzzel: accent color not found"
-    return
-  fi
-  if [ -z "$background" ]; then
-    echo "Fuzzel: background color not found"
-    return
-  fi
-  if [ -z "$foreground" ]; then
-    echo "Fuzzel: foreground color not found"
-    return
-  fi
-  if [ -z "$color8" ]; then
-    echo "Fuzzel: color8 not found"
-    return
-  fi
-  fuzzel_color "background" "$background"
+  for color in accent background foreground color8; do
+    if [ -z "${!color}" ]; then
+      echo "Fuzzel: $color not found"
+      return
+    fi
+  done
+  fuzzel_color "background" "$background" "60"
   fuzzel_color "text" "$foreground"
   fuzzel_color "match" "$accent"
   fuzzel_color "selection" "$accent"
@@ -199,8 +189,9 @@ if [ "$1" == "rofi" ]; then
   themes=$(echo_dirs)
   theme=$(echo -e "$themes" | rofi -dmenu -i -config "$rofi"/config.rasi)
 elif [ "$1" == "tui" ]; then
-  themes=$(echo_dirs | cat | tr '\n' ' ')
-  theme=$(gum filter "$themes")
+  themes=$(echo_dirs | tr '\n' ' ')
+  # WARN: do not add double quotes
+  theme=$(gum filter $themes)
 else
   theme=$1
 fi
