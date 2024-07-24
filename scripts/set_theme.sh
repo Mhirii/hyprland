@@ -16,6 +16,7 @@ waybar=$XDG_CONFIG_HOME/waybar
 
 fish=$dot/fish
 mako=$cf/mako
+fuzzel=$dot/fuzzel
 
 current_theme_path() {
   echo "$hypr/themes/$1"
@@ -70,6 +71,54 @@ set_starship() {
   sed -i "s/palette =.*/palette = \"$1\"/" "$HOME/.config/starship.toml"
 }
 
+remove_hashtag() {
+  echo "$1" | sed 's/#//'
+}
+fuzzel_color() {
+  field=$1
+  color=$(remove_hashtag "$2")
+  if [ -z "$3" ]; then
+    opacity="ff"
+  else
+    opacity=$3
+  fi
+  color="$color$opacity"
+  sed -i "s/$field=.*/$field=$color/" "$fuzzel/fuzzel.ini"
+}
+set_fuzzel() {
+  theme_file="$hypr/themes/$1/theme.sh"
+  if [ ! -f "$theme_file" ]; then
+    echo "Fuzzel: theme file not found"
+    echo "$theme_file"
+    return
+  fi
+  source "$theme_file"
+
+  if [ -z "$accent" ]; then
+    echo "Fuzzel: accent color not found"
+    return
+  fi
+  if [ -z "$background" ]; then
+    echo "Fuzzel: background color not found"
+    return
+  fi
+  if [ -z "$foreground" ]; then
+    echo "Fuzzel: foreground color not found"
+    return
+  fi
+  if [ -z "$color8" ]; then
+    echo "Fuzzel: color8 not found"
+    return
+  fi
+  fuzzel_color "background" "$background"
+  fuzzel_color "text" "$foreground"
+  fuzzel_color "match" "$accent"
+  fuzzel_color "selection" "$accent"
+  fuzzel_color "selection-text" "$color8"
+  fuzzel_color "selection-match" "$background"
+  fuzzel_color "border" "$accent"
+}
+
 set_theme() {
   set_waybar "$1"
   set_swaync "$1"
@@ -80,6 +129,7 @@ set_theme() {
   set_hypr "$1"
   set_wallaper "$1"
   set_starship "$1"
+  set_fuzzel "$1"
   if $use_mako; then
     makoctl reload
   else

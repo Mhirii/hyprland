@@ -5,8 +5,8 @@
   transparent:      #00000000;
   text:             #0F1A2Dff;
   foreground:       #cdd6f4ff;
-  selected:         #59a8f8ff;
+  selected:         #2ec1dcff;
   active:           #0F1A2Dff;
   urgent:           #ef6b91ff;
-  border:           #59a8f890;
+  border:           #2ec1dc90;
 }
