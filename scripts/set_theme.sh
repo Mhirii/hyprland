@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 use_mako=false
 
